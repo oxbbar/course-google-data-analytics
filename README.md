@@ -13,6 +13,18 @@
 - Tableau
 - Presentations & Reporting
 
+## Notebooks
+
+# Course 7
+
+- Week 3 - Being using notebook half way though week.
+- Week 4 - Notebook with code included.
+- Week 5 - No code to showcase, but R Markdown file --> PDF example included.
+
+# Course 8
+
+-
+
 ## Website
 
 https://www.coursera.org/professional-certificates/google-data-analytics
