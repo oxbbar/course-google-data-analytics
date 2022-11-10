@@ -23,7 +23,7 @@
 
 ### Course 8
 
-- 
+- [Bellabeat Case Study](https://github.com/oxbbar/course-google-data-analytics/tree/main/course_8_bellabeat/)
 
 ## Website
 
