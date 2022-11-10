@@ -20,14 +20,43 @@
 
 ## Introduction
 
+Bellabeat is a tech company that manufactures health products for women and wants to increase growth in the smart device market. The cofounders utilised one of their backgrounds as an artist to develop beautifully designed technology that informs and inspires women around the world.
+
+The company has invested in traditional advertising media, such as radio, out-of-home billboards, print, and television, but focuses on digital marketing extensively. Bellabeat invests year-round in Google Search, maintaining active Facebook and Instagram pages, and consistently engages consumers on Twitter. Additionally, Bellabeat runs video ads on Youtube and display ads on the Google Display Network to support campaigns around key marketing dates.
+
+The Bellabeat app provides users with health data related to their activity, sleep, stress, menstrual cycle, and mindfulness habits. This data can help users better understand their current habits and make healthy decisions. The Bellabeat app connects to their line of smart wellness products:
+- **Leaf**: Bellabeat’s classic wellness tracker can be worn as a bracelet, necklace, or clip. The Leaf tracker connects to the Bellabeat app to track activity, sleep, and stress.
+- **Time**: This wellness watch combines the timeless look of a classic timepiece with smart technology to track user activity, sleep, and stress. The Time watch connects to the Bellabeat app to provide you with insights into your daily wellness.
+- **Spring**: This is a water bottle that tracks daily water intake using smart technology to ensure that you are appropriately hydrated throughout the day. The Spring bottle connects to the Bellabeat app to track your hydration levels.
+
+Bellabeat also offers a subscription-based membership program for users. Membership gives users 24/7 access to fully personalized guidance on nutrition, activity, sleep, health and beauty, and mindfulness based on their lifestyle and goals.
+
+The CCO believes that analyzing consumer data for the usage of non-Bellabeat smart devices will provide the insight needed to guide future marketing strategies for their own products
 
 
-## Business Objective
+## Business Task
 
+Analyse trends in non-Bellabeat smart device usage and provide insight to inform the marketing strategies for one Bellabeat product and unlock new growth opportunities.
 
+Key stakeholders:
+- Urška Sršen: Bellabeat’s cofounder and Chief Creative Officer
+- Sando Mur: Bellabeat’s cofounder
+- Bellabeat marketing analytics team
 
 ## Preparation of the Data
 
+The [FitBit Fitness Tracker Data](https://www.kaggle.com/datasets/arashnic/fitbit) set from Kaggle was used:
+- Accopmanying journal article available through [JMIR Publications](https://doi.org/10.2196/resprot.6513).
+- This data set contains personal fitness data on thirty FitBit users
+  - Minute-level output for physical actiity, heart rate and sleep monitoring
+- It is available in the Public Domain (CC0)
+
+Limitations:
+- The data only contains records for 30 
+Original
+Comprehensive
+Current
+Cited
 
 
 ## Processing the Data
@@ -42,11 +71,13 @@
 
 
 
-## Deliverables
+## Deliverables and Recommendations
 
 
 
 ## Appendix - Code
+
+Installing and lthe required packages:
 
 ###
 
