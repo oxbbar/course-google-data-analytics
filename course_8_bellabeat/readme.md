@@ -59,11 +59,11 @@ Current
 Cited
 
 
-## Processing the Data
+## Processing the Daily Data
 
 
 
-## Analyzing the Data
+## Analyzing the Daily Data
 
 
 
@@ -79,9 +79,86 @@ Cited
 
 Installing and lthe required packages:
 
-###
+### Setup
 
-###
+Installing and loading the packages:
+
+`
+#install.packages("dplyr")
+#install.packages("tidyr")
+#install.packages("ggplot2")
+#install.packages("lubridate")
+#install.packages("readr")
+#install.packages("janitor")
+#install.packages("styler")
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(lubridate)
+library(readr)
+library(janitor)
+library(styler)
+`
+
+Creating a list of csv files in the directory:
+
+`
+files_csv <- list.files(path = "bellabeat_data/", pattern = "*.csv")
+`
+
+Creating a list of file names for the data frames:
+
+`
+files <- substr(files_csv,1,nchar(files_csv)-4)
+`
+
+Creating data frames for all the csv files:
+
+`
+for(i in files){
+  filepath = file.path(paste("bellabeat_data/",i,".csv", sep = ""))
+  assign(i,read_csv(filepath))
+}
+`
+
+Counting the distinct IDs in each data frame to determine how many individuals there were for each data set:
+
+`
+n_distinct(dailyActivity_merged$Id)
+n_distinct(dailyCalories_merged$Id)
+n_distinct(dailyIntensities_merged$Id)
+n_distinct(dailySteps_merged$Id)
+n_distinct(heartrate_seconds_merged$Id)
+n_distinct(hourlyCalories_merged$Id)
+n_distinct(hourlyIntensities_merged$Id)
+n_distinct(hourlySteps_merged$Id)
+n_distinct(minuteCaloriesNarrow_merged$Id)
+n_distinct(minuteCaloriesWide_merged$Id)
+n_distinct(minuteIntensitiesNarrow_merged$Id)
+n_distinct(minuteIntensitiesWide_merged$Id)
+n_distinct(minuteMETsNarrow_merged$Id)
+n_distinct(minuteSleep_merged$Id)
+n_distinct(minuteStepsNarrow_merged$Id)
+n_distinct(minuteStepsWide_merged$Id)
+n_distinct(sleepDay_merged$Id)
+n_distinct(weightLogInfo_merged$Id)
+`
+
+All data sets had 33 individuals, except for:
+- heartrate_seconds = 14
+- minuteSleep = 24
+- sleepDay = 24
+- WeightLogInfo = 8
+
+
+### Processing the Daily Data
+
+### Analysing the Daily Data
+
+### Processing the Hourly Data
+
+### Analysing the Hourly Data
+
 
 ## Appendix - Scenario
 
