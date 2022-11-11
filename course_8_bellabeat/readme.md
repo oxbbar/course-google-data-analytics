@@ -123,7 +123,7 @@ for(i in files){
 
 Counting the distinct IDs in each data frame to determine how many individuals there were for each data set:
 
-`
+```
 n_distinct(dailyActivity_merged$Id)
 n_distinct(dailyCalories_merged$Id)
 n_distinct(dailyIntensities_merged$Id)
@@ -142,7 +142,7 @@ n_distinct(minuteStepsNarrow_merged$Id)
 n_distinct(minuteStepsWide_merged$Id)
 n_distinct(sleepDay_merged$Id)
 n_distinct(weightLogInfo_merged$Id)
-`
+```
 
 All data sets had 33 individuals, except for:
 - heartrate_seconds = 14
