@@ -421,7 +421,6 @@ ggplot(data=merged_data_daily_bed_awake_averages_labelled, aes(x=week_day,y=mean
 
 ### Processing the Hourly Steps Data
 
-
 To familiarise myself with the structure of the data:
 ```
 str(hourlySteps_merged)
@@ -457,7 +456,7 @@ str(hourlySteps_merged)
 ### Processing the Hourly Intensities Data
 
 To familiarise myself with the structure of the data:
-``
+```
 str(hourlyIntensities_merged)
 ```
 
