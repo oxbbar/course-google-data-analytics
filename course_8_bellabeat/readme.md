@@ -77,20 +77,17 @@ Cited
 
 ## Appendix - Code
 
-Installing and lthe required packages:
-
 ### Setup
 
 Installing and loading the packages:
-
-`
-#install.packages("dplyr")
-#install.packages("tidyr")
-#install.packages("ggplot2")
-#install.packages("lubridate")
-#install.packages("readr")
-#install.packages("janitor")
-#install.packages("styler")
+```
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("ggplot2")
+install.packages("lubridate")
+install.packages("readr")
+install.packages("janitor")
+install.packages("styler")
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -98,31 +95,27 @@ library(lubridate)
 library(readr)
 library(janitor)
 library(styler)
-`
+```
 
 Creating a list of csv files in the directory:
-
-`
+```
 files_csv <- list.files(path = "bellabeat_data/", pattern = "*.csv")
-`
+```
 
 Creating a list of file names for the data frames:
-
-`
+```
 files <- substr(files_csv,1,nchar(files_csv)-4)
-`
+```
 
 Creating data frames for all the csv files:
-
-`
+```
 for(i in files){
   filepath = file.path(paste("bellabeat_data/",i,".csv", sep = ""))
   assign(i,read_csv(filepath))
 }
-`
+```
 
 Counting the distinct IDs in each data frame to determine how many individuals there were for each data set:
-
 ```
 n_distinct(dailyActivity_merged$Id)
 n_distinct(dailyCalories_merged$Id)
@@ -151,11 +144,349 @@ All data sets had 33 individuals, except for:
 - WeightLogInfo = 8
 
 
-### Processing the Daily Data
+### Processing the Daily Activity Data
+
+To familiarise myself with the structure of the data:
+```
+str(dailyActivity_merged)
+```
+
+Checking for NA values and duplicate rows:
+```
+sum(is.na(dailyActivity_merged))
+sum(duplicated(dailyActivity_merged))
+```
+
+No missing values or duplicated data. Need to check for results of 0 (i.e. user didn't record anything for that day or smart device wasn't used; calories = 0 will be used).
+```
+count(dailyActivity_merged, Calories == 0)
+```
+
+Those four entries can be removed.
+```
+dailyActivity_merged <- dailyActivity_merged %>%
+  filter(Calories > 0)
+count(dailyActivity_merged, Calories == 0)
+```
+
+The column names need to be cleaned.
+```
+dailyActivity_merged <- clean_names(dailyActivity_merged)
+str(dailyActivity_merged)
+```
+
+Adding a new date column in appropriate format, column for day of the week (with Monday being designated as the first day) and an "id_and_date" to use as reference for joins later.
+```
+dailyActivity_merged <- dailyActivity_merged %>%
+  mutate(
+    new_date = as.Date(activity_date,"%m/%d/%y"),
+    week_day = wday(new_date,label=TRUE,week_start=1),
+    id_and_date = paste0(id,"_and_",new_date)
+  )
+str(dailyActivity_merged)
+```
+
+### Processing the Daily Sleep Data
+
+To familiarise myself with the structure of the data:
+```
+str(sleepDay_merged)
+```
+
+Checking for NA values and duplicate rows:
+```
+sum(is.na(sleepDay_merged))
+sum(duplicated(sleepDay_merged))
+```
+
+Need to remove duplicates.
+```
+sleepDay_merged <- sleepDay_merged[!duplicated(sleepDay_merged),]
+sum(duplicated(sleepDay_merged))
+```
+
+The column names need to be cleaned.
+```
+sleepDay_merged <- clean_names(sleepDay_merged)
+str(sleepDay_merged)
+```
+
+Adding a new date column in appropriate format, column for day of the week and an "id_and_date" to use as reference for joins later.
+```
+sleepDay_merged <- sleepDay_merged %>%
+  mutate(
+    new_date = as.Date(sleep_day,"%m/%d/%y"),
+    week_day = wday(new_date,label=TRUE),
+    id_and_date = paste0(id,"_and_",new_date)
+  )
+str(sleepDay_merged)
+```
+
+### Processing the Daily Weight Data
+
+To familiarise myself with the structure of the data:
+```
+str(weightLogInfo_merged)
+```
+
+Checking for NA values and duplicate rows:
+```
+sum(is.na(weightLogInfo_merged))
+sum(duplicated(weightLogInfo_merged))
+```
+
+NA values exist, double check what they actually are:
+```
+head(weightLogInfo_merged)
+```
+They are just 'Fat' records that weren't put in, but other daily data exists for these dates. All good.
+
+The column names need to be cleaned.
+```
+weightLogInfo_merged <- clean_names(weightLogInfo_merged)
+str(weightLogInfo_merged)
+```
+
+Adding a new date column in appropriate format, column for day of the week and an "id_and_date" to use as reference for joins later.
+```
+weightLogInfo_merged <- weightLogInfo_merged %>%
+  mutate(
+    new_date = as.Date(date,"%m/%d/%y"),
+    week_day = wday(new_date,label=TRUE),
+    id_and_date = paste0(id,"_and_",new_date)
+  )
+str(weightLogInfo_merged)
+```
+
+### Creating temp tables for joining
+
+Daily Activity Data:
+```
+colnames(dailyActivity_merged)
+```
+```
+temp_daily_activity <- select(dailyActivity_merged, 
+  "id", 
+  "new_date",
+  "id_and_date",
+  "total_steps", 
+  "total_distance", 
+  "very_active_distance",
+  "moderately_active_distance",
+  "light_active_distance",
+  "sedentary_active_distance",
+  "very_active_minutes",
+  "fairly_active_minutes",
+  "lightly_active_minutes",
+  "sedentary_minutes",
+  "calories", 
+  "week_day"
+  )
+```
+
+Daily Sleep Data:
+```
+colnames(sleepDay_merged)
+```
+```
+temp_daily_sleep <- select(sleepDay_merged, 
+  "id_and_date",
+  "total_sleep_records",
+  "total_minutes_asleep",
+  "total_time_in_bed",
+  )
+```
+
+Merging these two data frames with an outer join:
+```
+merged_daily_activity_and_sleep <- merge(x = temp_daily_activity, y = temp_daily_sleep, by = "id_and_date", all = TRUE)
+str(merged_daily_activity_and_sleep)
+```
+
+Daily Weight Data:
+```
+colnames(weightLogInfo_merged)
+```
+``` {r preparing temp tables to merge}
+temp_daily_weight <- select(weightLogInfo_merged, 
+  "id_and_date",
+  "weight_kg",
+  "weight_pounds",
+  "fat",
+  "bmi",
+  "is_manual_report",
+  )
+colnames(temp_daily_weight)
+```
+
+Merging all data together:
+```
+merged_data_daily <- merge(x = merged_daily_activity_and_sleep, y = temp_daily_weight, by = "id_and_date", all = TRUE)
+str(merged_data_daily)
+glimpse(merged_data_daily)
+```
 
 ### Analysing the Daily Data
 
-### Processing the Hourly Data
+Creating a data frame of averages to analyse step data and intensity of distances and minutes:
+```
+merged_data_daily_averages <- merged_data_daily %>%
+  ## remove records where no steps were taken (no device usage)
+  filter(total_steps > 0) %>%
+  group_by(week_day) %>%
+    summarise(
+      mean_steps = mean(total_steps),
+      mean_total_distance = mean(total_distance),
+      mean_very_active_distance = mean(very_active_distance),
+      mean_moderately_active_distance = mean(moderately_active_distance),
+      mean_light_active_distance = mean(light_active_distance),
+      mean_sedentary_active_distance = mean(sedentary_active_distance),
+      mean_very_active_minutes = mean(very_active_minutes),
+      mean_fairly_active_minutes = mean(fairly_active_minutes),
+      mean_lightly_active_minutes = mean(lightly_active_minutes),
+      mean_sedentary_minutes = mean(sedentary_minutes),
+      mean_calories = mean(calories),
+      total_records = sum(!is.na(week_day))
+    )
+glimpse(merged_data_daily_averages)
+```
+
+Creating a graph of average steps per week day:
+```
+ggplot(data=merged_data_daily_averages, aes(x=week_day,y=mean_steps)) + geom_col()
+```
+
+Creating a graph of average calories per week day:
+```
+ggplot(data=merged_data_daily_averages, aes(x=week_day,y=mean_calories)) + geom_col()
+```
+
+Creating a graph of average records per week day:
+```
+ggplot(data=merged_data_daily_averages, aes(x=week_day,y=total_records)) + geom_col()
+```
+
+Creating a data frame of averages to analyse sleep data, including time in bed not asleep:
+```
+merged_data_daily_sleep_averages <- merged_data_daily %>%
+  ## remove records where no sleep record was made (no device usage)
+  filter(total_sleep_records > 0) %>%
+  ## create an extra column for time in bed but not asleep
+  mutate(
+    time_in_bed_awake = total_time_in_bed - total_minutes_asleep
+  ) %>%
+  group_by(week_day) %>%
+    summarise(
+      mean_total_minutes_asleep = mean(total_minutes_asleep),
+      mean_total_time_in_bed = mean(total_time_in_bed),
+      mean_time_in_bed_awake = mean(time_in_bed_awake),
+      total_records = sum(!is.na(week_day))
+    )
+glimpse(merged_data_daily_sleep_averages)
+```
+
+Creating a graph of average minutes asleep the night before each week day:
+```
+merged_data_daily_sleep_averages_labelled <- merged_data_daily %>%
+  ## remove records where no sleep record was made (no device usage)
+  filter(total_sleep_records > 0) %>%
+  group_by(week_day) %>%
+  summarise(
+    mean_total_minutes_asleep = mean(total_minutes_asleep),
+    hours = (mean_total_minutes_asleep/60),
+    floorhours = floor(hours),
+    sumhours = round(hours %% floorhours * 60,0 ),
+    label = paste0(floorhours,":",sumhours)
+  )
+ggplot(data=merged_data_daily_sleep_averages_labelled, aes(x=week_day,y=hours,label = label)) + geom_col() + geom_label(position = position_dodge(width = 1)) + xlab(label = "Week Day") + ylab(label = "Hours Sleep the Night Beofre") + ggtitle(label = "Mean Hours Sleep the Night Before Each Week Day")
+```
+
+
+Creating a graph of average time in bed and awake the night before each week day:
+```
+merged_data_daily_bed_awake_averages_labelled <- merged_data_daily %>%
+  ## remove records where no sleep record was made (no device usage)
+  filter(total_sleep_records > 0) %>%
+  ## create an extra column for time in bed but not asleep
+  mutate(
+    time_in_bed_awake = total_time_in_bed - total_minutes_asleep
+         ) %>%
+  group_by(week_day) %>%
+  summarise(
+    mean_time_in_bed_awake = mean(time_in_bed_awake),
+    label = paste0(round(mean_time_in_bed_awake)," mins")
+  )
+ggplot(data=merged_data_daily_bed_awake_averages_labelled, aes(x=week_day,y=mean_time_in_bed_awake,label = label)) + geom_col() + geom_label(position = position_dodge(width = 1)) + xlab(label = "Week Day") + ylab(label = "Mins Awake in Bed the Night Before") + ggtitle(label = "Mean Minutes Awake in Bed the Night Before Each Week Day")
+```
+
+### Processing the Hourly Steps Data
+
+
+To familiarise myself with the structure of the data:
+```
+str(hourlySteps_merged)
+```
+
+Checking for NA values and duplicate rows:
+```
+sum(is.na(hourlySteps_merged))
+sum(duplicated(hourlySteps_merged))
+```
+
+The column names need to be cleaned.
+```
+hourlySteps_merged <- clean_names(hourlySteps_merged)
+str(hourlySteps_merged)
+```
+
+Adding columns for the date, the hour(and ways to represent it) and and id/date/hour for joins later:
+```
+hourlySteps_merged <- hourlySteps_merged %>%
+  mutate(
+    new_date = as.Date(activity_hour,"%m/%d/%y"),
+    new_hour = format(mdy_hms(activity_hour),format="%H:%M"),
+    hour_int = hour(mdy_hms(activity_hour)),
+    hour_label = format(mdy_hms(activity_hour),format="%H%p"),
+    hour_label_simple = format(mdy_hms(activity_hour),format="%H"),
+    week_day = wday(new_date,label=TRUE,week_start=1),
+    id_and_time = paste0(id,"_and_",new_date,"_and_",new_hour)
+  )
+str(hourlySteps_merged)
+```
+
+### Processing the Hourly Intensities Data
+
+To familiarise myself with the structure of the data:
+``
+str(hourlyIntensities_merged)
+```
+
+Checking for NA values and duplicate rows:
+```
+sum(is.na(hourlyIntensities_merged))
+sum(duplicated(hourlyIntensities_merged))
+```
+
+The column names need to be cleaned.
+```
+hourlyIntensities_merged <- clean_names(hourlyIntensities_merged)
+str(hourlyIntensities_merged)
+```
+
+Adding columns for the date, the hour(and ways to represent it) and and id/date/hour for joins later:
+```
+hourlyIntensities_merged <- hourlyIntensities_merged %>%
+  mutate(
+    new_date = as.Date(activity_hour,"%m/%d/%y"),
+    new_hour = format(mdy_hms(activity_hour),format="%H:%M"),
+    hour_int = hour(mdy_hms(activity_hour)),
+    hour_label = format(mdy_hms(activity_hour),format="%H%p"),
+    hour_label_simple = format(mdy_hms(activity_hour),format="%H"),
+    week_day = wday(new_date,label=TRUE,week_start=1),
+    id_and_time = paste0(id,"_and_",new_date,"_and_",new_hour)
+  )
+str(hourlyIntensities_merged)
+```
 
 ### Analysing the Hourly Data
 
