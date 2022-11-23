@@ -344,6 +344,19 @@ filter(total_steps > 0) %>%
 ggplot(data=average_very_active_daily, aes(x=week_day,y=mean_va_mins,fill=mean_va_mins)) + geom_col() + labs(title="Average Very Active Minutes Per Week Day", x="Week Day", y="Average Very Active Minutes") + guides(fill="none")
 ```
 
+Create a graph of average very active minutes per week day with very_active_minutes > 0 to remove potentially incomplete records.
+``` {r}
+average_very_active_daily <- merged_data_daily %>%
+filter(total_steps > 0) %>%
+  filter(very_active_minutes > 0) %>%
+  group_by(week_day) %>%
+  summarise(
+    mean_va_mins = mean(very_active_minutes)
+  )
+
+ggplot(data=average_very_active_daily, aes(x=week_day,y=mean_va_mins,fill=mean_va_mins)) + geom_col() + labs(title="Average Very Active Minutes Per Week Day", x="Week Day", y="Average Very Active Minutes") + guides(fill="none")
+```
+
 Create a graph of daily steps vs. daily calories burned.
 ``` {r}
 daily_steps_vs_calories <- merged_data_daily %>%

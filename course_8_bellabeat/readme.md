@@ -5,13 +5,15 @@
 - [Introduction](#introduction)
 - [Business Objective](#business-objective)
 - [Preparation of the Data](#preparation-of-the-data)
-- [Processing the Data](#processing-the-data)
-- [Analyzing the Data](#analyzing-the-data)
-- [Visualizations](#visualizations)
-- [Deliverables](#deliverables)
+- [Processing the Daily Data](#processing-the-daily-data)
+- [Analyzing the Daily Data](#analyzing-the-daily-data)
+- [Processing the Hourly Data](#processing-the-hourly-data)
+- [Analyzing the Hourly Data](#analyzing-the-hourly-data)
+- [Deliverables and Recommendations](#deliverables-and-recommendations)
 - Appendix
   - [Appendix - Code](#appendix---code)
-
+  
+Code is also available as .Rmd and .ipynb files [here](https://github.com/oxbbar/course-google-data-analytics/tree/main/course_8_bellabeat).
 
 ## Introduction
 
@@ -92,9 +94,11 @@ All data sets had 33 individuals, except for:
 * Daily sleep data contained 3 duplicates that were removed.
 * The column names were cleaned
 * New columns were added to include the week day, date (in a date format), and id_and_date (to use for joins).
-* the daily activity, daily sleep and daily weight data sets were joined together.
+* The daily activity, daily sleep and daily weight data sets were joined together.
 
 ## Analyzing the Daily Data
+
+[Back to the Top](#table-of-contents)
 
 ![image](images/totalsteps.png)
 
@@ -102,15 +106,112 @@ At face value, users collectively walked the most steps on Sundays. This data is
 
 ![image](images/dataentries_weekday.png)
 
+To counter this, averages will need to be used for each week day.
 
+![image](images/avgsteps_weekday.png)
 
-## Visualizations
+Surprisingly, Thursdays seem to have the largest average numbers of steps taken, followed by the weekend.
 
+![image](images/avgcals_weekday.png)
 
+Thursdays, again, appear to be the day with the highest average calories burned, followed by Sundays.
+
+![image](images/avgsed_weekday.png)
+
+It appears Wednesdays, Saturdays and Sundays have the highest average number of sedentary minutes. It may be that workdays generally involved more walking, so the weekends have a higher number of sedentary minutes, but will have a higher number of fairly active and very active minutes. For each day, participants spent, on average, at least 13 hours experiencing sedentary minutes.
+
+![image](images/avgla_weekday.png)
+
+Thursdays appear to be the day with the highest average lightly active minutes, followed by Sundays.
+
+![image](images/avgfa_weekday.png)
+
+Thursdays, Fridays, Saturdays and Sundays have more fairly active minutes that the start of the week, on average.
+
+![image](images/avgva_weekday.png)
+
+Saturdays and Sundays have the greatest average number of very active minutes. This data includes a lot of records of "0" very active minutes. The following graph shows this data with "0" very active minute records filtered out.
+
+![image](images/avgvanonzero_weekday.png)
+
+With "0" records of very active minutes filtered, out, Thursdays and Fridays have the highest average very active minutes.
+
+![image](images/totalsteps_calories.png)
+
+As the number of total steps per day increases, the number of calories burned also increases. At the 10,000 step recommendation by the [CDC](https://www.cdc.gov/diabetes/prevention/pdf/postcurriculum_session8.pdf), indivudals burn approximately 2,500 calories per day.
+
+![image](images/vamins_calories.png)
+
+Participants appear to spend most days experiencing less than an hour of very active minutes. Individuals needed to spend approximately 35 minutes in a very active state to reach 2,500 daily calories burned.
+
+![image](images/sedmins_calories.png)
+
+The more minutes spent sedentary per day, the fewer calories burned. 
+
+![image](images/percentminutes.png)
+
+Participants spent, on average, 81.3% of the time in a sedentary position.
+
+![image](images/avghourssleep_weekday.png)
+
+Participants spent less than eight hours asleep each day, and less than 7 hours asleep on five days.
+
+![image](images/avgtimeinbed_weekday.png)
+
+Participants spend, on average, over 30 minutes in bed and awake daily.
+
+## Processing the Hourly Data
+
+[Back to the Top](#table-of-contents)
+
+* Columns were checked for NA values and duplicate rows.
+* The column names were cleaned
+* New columns were added to include the week day, date (in a date format), hour, and id_and_time (to use for joins).
+* The hourly steps, hourly intensities and hourly calories data sets were joined together. 
+
+## Analyzing the Hourly Data
+
+[Back to the Top](#table-of-contents)
+
+![image](images/avgstepshour.png)
+
+Participants were most active beteween 7:00 amd and 7:00 pm.
+
+![image](images/avgstepshour_weekday.png)
+
+Monday evenings and Thursdays appear to have unusual spikes in hourly activity.
+
+![image](images/avgcalshour.png)
+
+Participants burned the most calories between 5:00 pm and 8:00 pm.
+
+![image](images/avgscalshour_weekday.png)
+
+Monday evenings and Thursdays appear to have unusual spikes in the amount of calories burned.
+
+![image](images/avgintenhours_cals.png)
+
+The relationships between average intensity and caloried burned per hour is fairly linear until the average intensity reaches approximately 2.25, then the calories burned increases disproportionately.
 
 ## Deliverables and Recommendations
 
+- The [CDC recommends](https://www.cdc.gov/diabetes/prevention/pdf/postcurriculum_session8.pdf) that most adults should reach a daily step count of 10,000. This data shows that, on average, adults are not reaching this benchmark.
 
+- The [WHO recommends](https://www.who.int/news-room/fact-sheets/detail/physical-activity) that adults 18-64 years of age should do at least 150–300 minutes of moderate-intensity aerobic physical activity or at least 75–150 minutes of vigorous-intensity aerobic physical activity. Participants spent less than an hour, on average, each day experiencing very active minutes.
+
+- The [CDC recommends](https://www.cdc.gov/sleep/about_sleep/how_much_sleep.html) that adults 18-60 years of age should sleep for 7 or more hours per night. The data shows that on most days, individuals are not getting the recommended number of hours sleep.
+
+- Users track their activities early in the week, then make fewer entries until the weekend.
+
+- More accurate data is needed. It is recommended that Bellabeat find new data sources with more participants, consistent data entry and a greater number of variables to analyse, particularly to identify trends in females.
+
+- Products could notify users on how close their are to their 10,000 step goal, how close they are to their very active minutes goal, and how much sleep they got the night before.
+
+- Bellabeat could integrate a social aspect to allows users to encourage each other.
+
+- Data could sync automatically and remove some responsibility from the users, to provide more accurate recommendations.
+
+- Advertising could refer to how much sleep people are getting/should get, how many minutes people are spending active/should be, and how many calories the average adult should aim to burn a day/how to achieve it.
 
 ## Appendix - Code
 
@@ -444,6 +545,19 @@ Create a graph of average very active minutes per week day.
 ```
 average_very_active_daily <- merged_data_daily %>%
 filter(total_steps > 0) %>%
+  group_by(week_day) %>%
+  summarise(
+    mean_va_mins = mean(very_active_minutes)
+  )
+
+ggplot(data=average_very_active_daily, aes(x=week_day,y=mean_va_mins,fill=mean_va_mins)) + geom_col() + labs(title="Average Very Active Minutes Per Week Day", x="Week Day", y="Average Very Active Minutes") + guides(fill="none")
+```
+
+Create a graph of average very active minutes per week day with very_active_minutes > 0 to remove potentially incomplete records.
+```
+average_very_active_daily <- merged_data_daily %>%
+filter(total_steps > 0) %>%
+  filter(very_active_minutes > 0) %>%
   group_by(week_day) %>%
   summarise(
     mean_va_mins = mean(very_active_minutes)
