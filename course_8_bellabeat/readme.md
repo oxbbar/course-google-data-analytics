@@ -185,7 +185,7 @@ Monday evenings and Thursdays appear to have unusual spikes in hourly activity.
 
 Participants burned the most calories between 5:00 pm and 8:00 pm.
 
-![image](images/avgscalshour_weekday.png)
+![image](images/avgcalshour_weekday.png)
 
 Monday evenings and Thursdays appear to have unusual spikes in the amount of calories burned.
 
