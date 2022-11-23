@@ -11,7 +11,6 @@
 - [Deliverables](#deliverables)
 - Appendix
   - [Appendix - Code](#appendix---code)
-  - [Appendix - Scenario](#appendix---scenario)
 
 
 ## Introduction
@@ -292,7 +291,7 @@ Daily Weight Data.
 ```
 colnames(weightLogInfo_merged)
 ```
-``` {r preparing temp tables to merge}
+```
 temp_daily_weight <- select(weightLogInfo_merged, 
   "id_and_date",
   "weight_kg",
@@ -406,7 +405,7 @@ merged_data_daily_sleep_averages <- merged_data_daily %>%
 glimpse(merged_data_daily_sleep_averages)
 ```
 
-Creating a graph of average minutes asleep the night before each week day.
+Create a graph of average minutes asleep each week day.
 ```
 merged_data_daily_sleep_averages_labelled <- merged_data_daily %>%
   ## remove records where no sleep record was made (no device usage)
@@ -423,7 +422,7 @@ ggplot(data=merged_data_daily_sleep_averages_labelled, aes(x=week_day,y=hours,la
 ```
 
 
-Creating a graph of average time in bed and awake the night before each week day.
+Create a graph of average time in bed and awake each week day.
 ```
 merged_data_daily_bed_awake_averages_labelled <- merged_data_daily %>%
   ## remove records where no sleep record was made (no device usage)
