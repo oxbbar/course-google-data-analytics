@@ -83,6 +83,7 @@ install.packages("lubridate")
 install.packages("readr")
 install.packages("janitor")
 install.packages("styler")
+install.packages("plotly")
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -90,6 +91,7 @@ library(lubridate)
 library(readr)
 library(janitor)
 library(styler)
+library(plotly)
 ```
 
 Create a list of csv files in the directory.
@@ -360,6 +362,54 @@ Create a graph of average records per week day.
 ggplot(data=merged_data_daily_averages, aes(x=week_day,y=total_records,fill=total_records)) + geom_col() + labs(title="Average Data Entries Per Week Day", x="Week Day", y="Average Data Entries") + guides(fill="none")
 ```
 
+Create a graph of average sedentary minutes per week day.
+```
+average_sedentary_daily <- merged_data_daily %>%
+filter(total_steps > 0) %>%
+  group_by(week_day) %>%
+  summarise(
+    mean_sed_mins = mean(sedentary_minutes)
+  )
+
+ggplot(data=average_sedentary_daily, aes(x=week_day,y=mean_sed_mins,fill=mean_sed_mins)) + geom_col() + labs(title="Average Sedentary Minutes Per Week Day", x="Week Day", y="Average Sedentary Minutes") + guides(fill="none")
+```
+
+Create a graph of average lightly active minutes per week day.
+```
+average_lightly_active_daily <- merged_data_daily %>%
+filter(total_steps > 0) %>%
+  group_by(week_day) %>%
+  summarise(
+    mean_la_mins = mean(lightly_active_minutes)
+  )
+
+ggplot(data=average_lightly_active_daily, aes(x=week_day,y=mean_la_mins,fill=mean_la_mins)) + geom_col() + labs(title="Average Lightly Active Minutes Per Week Day", x="Week Day", y="Average Lightly Active Minutes") + guides(fill="none")
+```
+
+Create a graph of average fairly active minutes per week day.
+```
+average_fairly_active_daily <- merged_data_daily %>%
+filter(total_steps > 0) %>%
+  group_by(week_day) %>%
+  summarise(
+    mean_fa_mins = mean(fairly_active_minutes)
+  )
+
+ggplot(data=average_fairly_active_daily, aes(x=week_day,y=mean_fa_mins,fill=mean_fa_mins)) + geom_col() + labs(title="Average Fairly Active Minutes Per Week Day", x="Week Day", y="Average Fairly Active Minutes") + guides(fill="none")
+```
+
+Create a graph of average very active minutes per week day.
+```
+average_very_active_daily <- merged_data_daily %>%
+filter(total_steps > 0) %>%
+  group_by(week_day) %>%
+  summarise(
+    mean_va_mins = mean(very_active_minutes)
+  )
+
+ggplot(data=average_very_active_daily, aes(x=week_day,y=mean_va_mins,fill=mean_va_mins)) + geom_col() + labs(title="Average Very Active Minutes Per Week Day", x="Week Day", y="Average Very Active Minutes") + guides(fill="none")
+```
+
 Create a graph of daily steps vs. daily calories burned.
 ```
 daily_steps_vs_calories <- merged_data_daily %>%
@@ -388,6 +438,33 @@ summarise (
     calories = calories    
     )
 ggplot(data=sedentary_calories, aes(x=sedentary_minutes,y=calories)) + geom_point() + geom_smooth(method=lm, aes(x=sedentary_minutes,y=calories)) + labs(title="Sedentary Minutes vs. Calories Burned", x="Sedentary Minutes",y="Calories Burned")
+```
+
+Create a pie chart of percentage per day in each active zone.
+```
+active_minutes_summary <- merged_data_daily %>%
+  summarise(
+  sedentary_minutes = mean(sedentary_minutes),
+  lightly_active_minutes = mean(lightly_active_minutes),
+  fairly_active_minutes = mean(fairly_active_minutes),
+  very_active_minutes = mean(very_active_minutes),
+)
+
+percentage <- data.frame(
+  levels = c(
+    "Sedentary",
+    "Lightly",
+    "Fairly Active",
+    "Very Active"),
+  percentage = c(
+    active_minutes_summary$sedentary_minutes, 
+    active_minutes_summary$lightly_active_minutes, 
+    active_minutes_summary$fairly_active_minutes, 
+    active_minutes_summary$very_active_minutes)
+)
+
+plot_ly(percentage, labels = ~levels, values = ~percentage, type = 'pie') %>%
+  layout(title="Percentage of Day in Active Zones")
 ```
 
 Create a data frame of averages to analyse sleep data, including time in bed not asleep.
