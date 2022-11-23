@@ -13,7 +13,7 @@
 - Appendix
   - [Appendix - Code](#appendix---code)
   
-Code is also available as .Rmd and .ipynb files [here](https://github.com/oxbbar/course-google-data-analytics/tree/main/course_8_bellabeat).
+Code is also available as .Rmd and .ipynb files.
 
 ## Introduction
 
