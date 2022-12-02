@@ -1,5 +1,11 @@
 # Google Data Analytics Professional Certificate
 
+## Table of Contents
+- [Skills](#skills)
+- [Projects](#projects)
+- [Website](#website)
+- [Descriptions of Courses](#descriptions-of-courses)
+
 ## Skills
 
 - Spreadsheets
@@ -13,17 +19,9 @@
 - Tableau
 - Presentations & Reporting
 
-## Notebooks
+## Projects
 
-### Course 7
-
-- Week 3 - Being using notebook half way though week.
-- Week 4 - Notebook with code included.
-- Week 5 - No code to showcase, but R Markdown file --> PDF example included.
-
-### Course 8
-
-- [Bellabeat Case Study](https://github.com/oxbbar/course-google-data-analytics/tree/main/course_8_bellabeat/)
+- [Analysing FitBit Health and Fitness Data](https://github.com/oxbbar/course-google-data-analytics/tree/main/course_8_bellabeat/)
 
 ## Website
 
