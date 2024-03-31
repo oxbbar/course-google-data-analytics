@@ -22,6 +22,9 @@
 ## Projects
 
 - [Analysing FitBit Health and Fitness Data](https://github.com/oxbbar/course-projects/tree/main/google-data-analytics-bellabeat-case-study/)
+    - Analysed daily and hourly health and fitness data to identify trends and inform marketing strategies.
+     - R; RStudio; Data cleaning and analysis; SQL; Tableau
+
 
 ## Website
 
