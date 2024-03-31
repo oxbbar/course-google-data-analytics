@@ -21,7 +21,7 @@
 
 ## Projects
 
-- [Analysing FitBit Health and Fitness Data](https://github.com/oxbbar/course-google-data-analytics/tree/main/course_8_bellabeat/)
+- [Analysing FitBit Health and Fitness Data](https://github.com/oxbbar/course-projects/tree/main/google-data-analytics-bellabeat-case-study/)
 
 ## Website
 
